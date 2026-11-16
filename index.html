@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#123c6a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="description" content="سائق آمن - مصر: تعلم بسيط بالصوت والصورة لسائق التوك توك">
+<link rel="manifest" href="manifest.webmanifest">
+<title>سائق آمن – مصر</title>
+<style>
+:root{--blue:#123c6a;--blue2:#1d5b91;--gold:#f2b84b;--bg:#f3f6fa;--ink:#172536;--muted:#607184;--white:#fff;--green:#18794e;--red:#b42318}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.7}
+header{background:linear-gradient(135deg,var(--blue),var(--blue2));color:white;padding:22px 16px 26px;border-radius:0 0 24px 24px}
+.wrap{max-width:760px;margin:auto;padding:0 14px}header .top{display:flex;align-items:center;gap:12px}.logo{width:54px;height:54px;border-radius:16px;background:#ffffff20;display:grid;place-items:center;font-size:30px}
+h1{font-size:24px;margin:0}header p{margin:6px 0 0;color:#e6eff8;font-size:14px}
+main{padding:16px 0 40px}.welcome,.panel,.lesson-card{background:var(--white);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 3px 14px #153b6010}
+.welcome{border:1px solid #dce7f2}.welcome strong{font-size:18px;color:var(--blue)}
+button{border:0;border-radius:13px;padding:12px 15px;font:inherit;font-weight:bold;cursor:pointer}
+.primary{background:var(--blue);color:white}.gold{background:var(--gold);color:#382600}.soft{background:#eaf1f8;color:var(--blue)}.sound{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{background:white;border:1px solid #e0e8f0;border-radius:16px;padding:14px;text-align:right;min-height:112px;color:var(--ink)}
+.tile .emoji{font-size:27px;display:block}.tile b{display:block;color:var(--blue);font-size:16px}.tile small{color:var(--muted)}
+.section-title{font-size:19px;margin:18px 3px 10px;color:var(--blue)}
+.progress{height:9px;background:#e8edf3;border-radius:20px;overflow:hidden;margin:8px 0}.progress span{display:block;height:100%;background:#25a36a;width:0}
+.hidden{display:none!important}.back{margin-bottom:12px}.lesson-head{display:flex;align-items:center;gap:12px}.lesson-icon{font-size:34px;background:#edf4fa;border-radius:14px;padding:8px}
+.lesson-head h2{font-size:20px;margin:0;color:var(--blue)}.lesson-head p{margin:2px 0;color:var(--muted);font-size:13px}
+.callout{background:#f0f6fc;border-right:4px solid var(--gold);padding:12px;border-radius:10px;margin:12px 0}
+.keypoints{display:grid;gap:8px}.point{background:#f7f9fc;border-radius:12px;padding:10px}
+.question{padding:13px 0;border-top:1px solid #e8edf3}.question:first-child{border:0}.answers{display:grid;gap:8px;margin-top:9px}
+.answer{background:#f2f5f8;text-align:right;border:2px solid transparent}.answer.selected{border-color:var(--blue);background:#eaf2fa}.answer.correct{border-color:var(--green);background:#e9f7ef}.answer.wrong{border-color:var(--red);background:#fff0ef}
+.feedback{font-size:14px;color:var(--muted);margin-top:7px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+ <div class="top"><div class="logo">🛺</div><div><h1>سائق آمن – مصر</h1><p>سائق محترف.. راكب آمن.. شارع أفضل</p></div></div>
+</div></header>
+<main class="wrap">
+<section id="home">
+ <div class="welcome">
+  <strong id="greetingText">صباح الخيرات والبركات 🌞</strong>
+  <div>يومنا كله رزق وبركة إن شاء الله. أهلاً بيك في سائق آمن – مصر.</div>
+  <div class="sound">
+   <button class="primary" id="welcomePlay">🔊 اسمع الترحيب</button>
+   <button class="soft" id="welcomeStop">إيقاف الصوت</button>
+  </div>
+  <small style="color:#607184">الصوت اختياري. اسمع الدروس وأنت واقف وفي مكان آمن، مش أثناء القيادة.</small>
+ </div>
+ <div class="panel">
+  <b>أهلاً بيك يا بطل 👋</b>
+  <div>كل يوم نتعلم حاجة صغيرة تحافظ على سلامتك وسلامة الناس.</div>
+  <div class="progress"><span id="progressBar"></span></div>
+  <small id="progressText">أنجزت 0 من 5 دروس</small>
+ </div>
+ <h2 class="section-title">اختار الدرس</h2>
+ <div class="grid" id="lessonGrid"></div>
+ <div class="panel" style="margin-top:14px">
+  <b>⭐ نقاطك: <span id="points">0</span></b>
+  <p style="margin:4px 0 0;color:#607184">كل اختبار تجتازه يضيف لك نقاط تشجيعية على هذا الجهاز.</p>
+ </div>
+</section>
+<section id="lessonView" class="hidden">
+ <button class="soft back" id="backBtn">← رجوع للدروس</button>
+ <div class="lesson-card">
+  <div class="lesson-head"><div class="lesson-icon" id="lessonEmoji">🚦</div><div><h2 id="lessonTitle"></h2><p id="lessonGoal"></p></div></div>
+  <div class="callout" id="lessonIntro"></div>
+  <div class="sound">
+   <button class="primary" id="playLesson">🔊 اسمع الدرس</button>
+   <button class="soft" id="stopLesson">إيقاف</button>
+  </div>
+  <h3 class="section-title">خلاصة الدرس</h3><div class="keypoints" id="lessonPoints"></div>
+  <h3 class="section-title">اختبر نفسك</h3><div id="quiz"></div>
+  <button class="gold" id="submitQuiz" style="width:100%;margin-top:12px">اعرف نتيجتي</button>
+  <div id="result" class="callout hidden"></div>
+  <div class="callout"><b>💡 افتكر دايماً:</b><div id="takeaway"></div></div>
+ </div>
+</section>
+</main>
+<footer>سائق آمن – مصر | تطبيق توعوي للتعلم والسلامة<br>المحتوى لا يغني عن تعليمات المرور والقوانين السارية.</footer>
+<script>
+const lessons = [
+{ id:1, icon:"🚦", title:"افهم الطريق", goal:"اعرف الإشارة واتصرف صح", intro:"يا بطل، الطريق لينا كلنا. خليك صاحي للإشارات، وخلي بالك من الناس حواليك.", script:"صباح الخير يا بطل. الطريق لينا كلنا، ولازم نحافظ على نفسنا وعلى الناس. لما تشوف الإشارة الحمرا، قف قبل خط الوقوف. لما تشوف البرتقالي، استعد تقف، وما تزودش السرعة. الأخضر معناه اتحرك بعد ما تتأكد إن الطريق فاضي وآمن. لو رجل المرور بينظم الطريق، اتبع تعليماته. وما تدخلش تقاطع لو هتسد الطريق على الناس. ربنا يحفظك ويرزقك.", points:["🔴 الأحمر: قف قبل خط الوقوف.","🟠 البرتقالي: استعد للوقوف بأمان.","🟢 الأخضر: اتحرك بعد ما تتأكد إن الطريق آمن.","👮 اتبع تعليمات رجل المرور.","🚶 احترم المشاة وما تسدش التقاطع."], takeaway:"احترم الإشارة.. تحافظ على حياتك وحياة غيرك.", quiz:[
+{q:"لما الإشارة تبقى حمراء تعمل إيه؟",a:["تزود السرعة","تقف قبل خط الوقوف","تستخدم الكلاكس"],c:1,e:"الأحمر معناه قف قبل خط الوقوف."},
+{q:"لما الإشارة تبقى برتقالية؟",a:["تستعد للوقوف بأمان","تزود السرعة","تتجاهلها"],c:0,e:"استعد للوقوف، ولا تستمر إلا إذا كان الوقوف المفاجئ غير آمن."},
+{q:"لو رجل المرور بينظم الطريق؟",a:["تتجاهله","تتبع تعليماته","تتحرك من نفسك"],c:1,e:"اتبع تعليمات رجل المرور."}]},
+{ id:2, icon:"🛡️", title:"قيادتك أمانة", goal:"احمي نفسك والراكب من الحوادث", intro:"مشوار زيادة بسرعة مش مستاهل خطر. الهدوء والانتباه ممكن يحافظوا على حياة.", script:"يا بطل، الرزق محتاج سعي، لكن سلامتك وسلامة الراكب أهم من أي مشوار. ما تجريش، وخلي سرعتك مناسبة للطريق. سيب مسافة بينك وبين المركبة اللي قدامك، عشان لو وقفت فجأة تقدر تقف بأمان. ما تمسكش الموبايل وإنت سايق، وما تبصش عليه. خليك مركز، وخلي بالك من الأطفال والمشاة والمطبات. لو تعبان أو نعسان، اركن في مكان آمن وخد راحة. سوق بهدوء، وربنا يفتحها عليك.", points:["🐢 ما تجريش؛ خليك بسرعة مناسبة للطريق.","↔️ سيب مسافة أمان بينك وبين اللي قدامك.","📵 ما تستخدمش الموبايل وإنت سايق.","👀 ركز في الطريق وخلي بالك من المشاة والأطفال.","😴 لو نعسان أو تعبان، قف في مكان آمن وخد راحة."], takeaway:"المشوار اللي يتأخر شوية أحسن من حادث يضيع العمر.", quiz:[
+{q:"ليه تسيب مسافة بينك وبين اللي قدامك؟",a:["عشان تلحق تزود السرعة","عشان تقدر تقف بأمان","ملهاش لازمة"],c:1,e:"المسافة بتديك وقت تتصرف لو المركبة اللي قدامك وقفت."},
+{q:"ينفع تمسك الموبايل وإنت سايق؟",a:["أيوه عادي","لما الطريق يكون زحمة","لأ، اركن في مكان آمن الأول"],c:2,e:"الموبايل بيشتت انتباهك. استخدمه بعد ما تقف بأمان."},
+{q:"لو حاسس إنك نعسان؟",a:["تكمل بسرعة","تقف في مكان آمن وترتاح","تعلي صوت الأغاني"],c:1,e:"الراحة تحميك وتحمي الناس."}]},
+{ id:3, icon:"🤝", title:"الراكب أمانة", goal:"عامل كل راكب باحترام وأمان", intro:"الراكب إنسان له احترامه. الكلمة الطيبة والمعاملة الحسنة بتفرق.", script:"يا بطل، كل واحد بيركب معاك له أهل مستنيينه. استقبل الناس بكلمة طيبة، واتفق على الأجرة قبل ما تتحرك. ساعد الكبير أو اللي محتاج مساعدة من غير استعجال، وخلي الراكب يركب وينزل في مكان آمن. احترم الستات والأطفال وكبار السن، وما تضايقش حد بكلام أو تصرف. ما تحملش عدد أكبر من المسموح، وما تخليش طفل يقف أو يتحرك بشكل خطر. ولو حصل خلاف، اتكلم بهدوء وما تستخدمش إيدك أو صوتك للتهديد. سمعتك الطيبة رزق.", points:["🙂 استقبل الراكب باحترام وكلمة طيبة.","💰 اتفق على الأجرة قبل التحرك.","🧓 ساعد كبار السن واللي محتاج مساعدة بأمان.","👨‍👩‍👧 احمِ الأطفال وما تسمحش بتصرف خطر.","🗣️ حل الخلاف بالكلام الهادي."], takeaway:"عامل الناس زي ما تحب الناس تعامل أهلك.", quiz:[
+{q:"الأفضل تتفق على الأجرة إمتى؟",a:["بعد الوصول","قبل التحرك","من غير اتفاق"],c:1,e:"الاتفاق من البداية يقلل الخلاف."},
+{q:"لو راكب كبير في السن؟",a:["تستعجله","تساعده بهدوء في مكان آمن","تسيبه في الطريق"],c:1,e:"ساعده من غير تعريضه أو تعريض نفسك للخطر."},
+{q:"لو حصل خلاف على الأجرة؟",a:["تزعق وتهدد","تتكلم بهدوء وتحاول تحل الخلاف","تسوق بعصبية"],c:1,e:"الهدوء يحمي الجميع ويقلل المشكلة."}]},
+{ id:4, icon:"🔧", title:"حافظ على التوك توك", goal:"افحص مركبتك قبل الشغل", intro:"دقيقة فحص قبل المشوار ممكن تمنع عطل أو حادث.", script:"يا بطل، التوك توك مصدر رزقك، فحافظ عليه. قبل ما تبدأ الشغل، بص على الكاوتش: هل فيه قطع أو هوا ناقص؟ جرّب الفرامل في مكان آمن قبل ما تدخل الطريق. اتأكد إن النور والإشارات شغالين، وإن المرايات واضحة. لو سمعت صوت غريب أو حسيت إن الفرامل مش مظبوطة، ما تكملش المشوار قبل ما تكشف عند فني. حافظ على النظافة، وما تحملش المركبة فوق طاقتها أو فوق العدد المسموح. الصيانة مش خسارة؛ دي حماية ليك ولرزقك.", points:["🛞 بص على الكاوتش وحالته.","🛑 اتأكد إن الفرامل شغالة كويس.","💡 راجع النور والإشارات والمرايات.","🔧 لو فيه عطل مؤثر، اكشف عند فني قبل السير.","🧹 حافظ على النظافة وما تحملش زيادة."], takeaway:"افحص قبل ما تتحرك.. سلامتك ورزقك يستاهلوا.", quiz:[
+{q:"لو الفرامل مش شغالة كويس؟",a:["تكمل عادي","تسرع عشان تخلص","ما تتحركش قبل الإصلاح"],c:2,e:"الفرامل عطل خطير ولازم يتصلح قبل السير."},
+{q:"إيه اللي تراجعه قبل الشغل؟",a:["الكاوتش والفرامل والنور","لون المركبة فقط","ولا حاجة"],c:0,e:"الفحص البسيط يساعد على اكتشاف الأعطال."},
+{q:"ينفع تحمل المركبة فوق طاقتها؟",a:["أيوه","لأ، التزم بالحمولة والعدد المسموح","لو المشوار قصير"],c:1,e:"التحميل الزائد يزود الخطر."}]},
+{ id:5, icon:"📋", title:"مهنتك مسؤولية", goal:"اشتغل بشكل قانوني وواضح", intro:"لما تكون أوراقك سليمة واتفاقك واضح، تحمي نفسك وتكسب ثقة الناس.", script:"يا بطل، شغلك له قيمة، ومن حقك تكسب بالحلال وتشتغل في أمان. اتأكد إن أوراق المركبة ورخصتك سارية ومناسبة، واسأل المرور أو الوحدة المحلية عن المطلوب في منطقتك. التزم بخط السير المسموح، وما تدخلش أماكن ممنوع السير فيها. بالنسبة للأجرة، اتفق مع الراكب بوضوح، والتزم بالتعريفة الرسمية المقررة في منطقتك لو موجودة. ما تفرضش مبلغ من نفسك، وما تدخلش في خناقة. لو مش عارف معلومة قانونية، اسأل جهة المرور المختصة؛ ما تعتمدش على كلام الناس. شغلك المحترم يحافظ على رزقك وراحة الناس.", points:["📄 راجع صلاحية الرخص والأوراق المطلوبة.","🗺️ التزم بخط السير المسموح في منطقتك.","💰 اعرف التعريفة الرسمية المقررة واتفق بوضوح.","🚫 ما تفرضش أجرة من نفسك.","🏢 اسأل المرور أو الجهة المحلية عن أي معلومة قانونية."], takeaway:"الشغل القانوني والاتفاق الواضح يحافظوا على رزقك وحقوق الناس.", quiz:[
+{q:"لو مش عارف خط السير المسموح؟",a:["تسير في أي مكان","تسأل المرور أو الجهة المختصة","تسأل أي شخص وخلاص"],c:1,e:"المعلومة الصحيحة تؤخذ من الجهة المختصة."},
+{q:"تتعامل مع الأجرة إزاي؟",a:["تفرض مبلغ من نفسك","تتفق بوضوح وتلتزم بالتعريفة المقررة","تغيرها بعد الوصول"],c:1,e:"الوضوح والالتزام يمنعان النزاع."},
+{q:"لو مش متأكد من ورق المركبة؟",a:["تتجاهل الموضوع","تراجع المرور أو الجهة المختصة","تسأل راكب"],c:1,e:"تأكد من المتطلبات الرسمية في منطقتك."}]}
+];
+const $=id=>document.getElementById(id);
+let current=null, selected={};
+let done=JSON.parse(localStorage.getItem("sa_done")||"{}");
+let points=Number(localStorage.getItem("sa_points")||0);
+function save(){localStorage.setItem("sa_done",JSON.stringify(done));localStorage.setItem("sa_points",String(points));}
+function speak(text){if(!("speechSynthesis" in window)){alert("خاصية الصوت غير متاحة في هذا المتصفح.");return;}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang="ar-EG";u.rate=.88;u.pitch=1.03;speechSynthesis.speak(u);}
+function stop(){if("speechSynthesis" in window)speechSynthesis.cancel();}
+function greeting(){let h=new Date().getHours();return h>=4&&h<12?"صباح الخيرات والبركات 🌞":h>=12&&h<18?"نهارك سعيد ومليان رزق وبركة 🌤️":"مساء الخير والبركة 🌙";}
+function welcomeText(){return greeting()+". يومنا كله رزق وبركة إن شاء الله. أهلاً بيك في سائق آمن – مصر. اتعلم حاجة جديدة كل يوم، وربنا يحفظك ويحفظ كل الناس.";}
+function renderHome(){
+ $("greetingText").textContent=greeting();$("points").textContent=points;
+ let count=Object.keys(done).length;$("progressText").textContent=`أنجزت ${count} من 5 دروس`;$("progressBar").style.width=(count/5*100)+"%";
+ $("lessonGrid").innerHTML=lessons.map(l=>`<button class="tile" data-id="${l.id}"><span class="emoji">${l.icon}</span><b>${l.title}</b><small>${done[l.id]?"✅ خلصت الدرس":"افتح الدرس واتعلم"}</small></button>`).join("");
+ document.querySelectorAll(".tile").forEach(b=>b.onclick=()=>openLesson(Number(b.dataset.id)));
+}
+function openLesson(id){
+ stop();current=lessons.find(l=>l.id===id);selected={};
+ $("home").classList.add("hidden");$("lessonView").classList.remove("hidden");
+ $("lessonEmoji").textContent=current.icon;$("lessonTitle").textContent=`الدرس ${id}: ${current.title}`;$("lessonGoal").textContent=current.goal;$("lessonIntro").textContent=current.intro;$("takeaway").textContent=current.takeaway;
+ $("lessonPoints").innerHTML=current.points.map(p=>`<div class="point">${p}</div>`).join("");
+ $("quiz").innerHTML=current.quiz.map((q,i)=>`<div class="question"><b>${i+1}. ${q.q}</b><div class="answers">${q.a.map((a,j)=>`<button class="answer" data-q="${i}" data-a="${j}">${a}</button>`).join("")}</div><div class="feedback hidden" id="fb${i}"></div></div>`).join("");
+ document.querySelectorAll(".answer").forEach(b=>b.onclick=()=>{if($("result").classList.contains("hidden")){let qi=+b.dataset.q;selected[qi]=+b.dataset.a;document.querySelectorAll(`[data-q="${qi}"]`).forEach(x=>x.classList.remove("selected"));b.classList.add("selected");}});
+ $("result").classList.add("hidden");$("submitQuiz").disabled=false;$("submitQuiz").textContent="اعرف نتيجتي";
+}
+$("welcomePlay").onclick=()=>speak(welcomeText());$("welcomeStop").onclick=stop;
+$("playLesson").onclick=()=>speak(current.script);$("stopLesson").onclick=stop;
+$("backBtn").onclick=()=>{stop();$("lessonView").classList.add("hidden");$("home").classList.remove("hidden");renderHome();};
+$("submitQuiz").onclick=()=>{
+ if(Object.keys(selected).length!==3){alert("جاوب على الأسئلة الثلاثة الأول.");return;}
+ let score=0;
+ current.quiz.forEach((q,i)=>{let chosen=selected[i];if(chosen===q.c)score++;document.querySelectorAll(`[data-q="${i}"]`).forEach((b,j)=>{b.disabled=true;if(j===q.c)b.classList.add("correct");else if(j===chosen)b.classList.add("wrong");});let fb=$("fb"+i);fb.textContent=q.e;fb.classList.remove("hidden");});
+ $("result").textContent=`نتيجتك ${score} من 3. ${score===3?"ممتاز يا بطل!":"برافو إنك بتحاول. اسمع الدرس وجرّب تاني."}`;$("result").classList.remove("hidden");
+ if(score===3&&!done[current.id]){done[current.id]=true;points+=10;save();}
+ $("submitQuiz").disabled=true;$("submitQuiz").textContent="تم تسجيل النتيجة";
+};
+if("serviceWorker" in navigator && location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
+renderHome();
+</script>
+</body></html>
